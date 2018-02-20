@@ -4,7 +4,7 @@ def setup(sphinx):
     # sphinx.add_lexer('Solidity', SolidityLexer())
 
 source_suffix = '.rst'
-master_doc = 'README'
+master_doc = 'docs/README'
 project = 'Blockchain Learning Group Land Registry'
 copyright = '2018, Blockchain Learning Group Inc.'
 highlight_language = 'Solidity'
