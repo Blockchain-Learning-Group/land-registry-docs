@@ -1,9 +1,7 @@
-import sys, os
-
 def setup(sphinx):
     pass
-    from SolidityLexer import SolidityLexer
-    sphinx.add_lexer('Solidity', SolidityLexer())
+    # from SolidityLexer import SolidityLexer
+    # sphinx.add_lexer('Solidity', SolidityLexer())
 
 source_suffix = '.rst'
 master_doc = 'README'
