@@ -1,6 +1,7 @@
 import sys, os
 
 def setup(sphinx):
+    pass
     from SolidityLexer import SolidityLexer
     sphinx.add_lexer('Solidity', SolidityLexer())
 
