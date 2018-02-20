@@ -13,4 +13,4 @@ Contents
    db-service
    eth-service
    ipfs-service
-   ladn-registry-service
+   land-registry-service
