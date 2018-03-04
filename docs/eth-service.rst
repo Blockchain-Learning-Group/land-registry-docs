@@ -36,6 +36,7 @@ Table of Contents
     - `Get Deed By Id <#get-deed-by-id>`_: ``GET /deeds/:deedId``
     - `Get Deeds By Property Id <#get-beeds-by-property-id>`_: ``GET /getDeedsByProperty/:propertyId``
     - `Sign Deed <#sign-deed>`_: ``PUT /signDeed/{data}``
+    - `Set Deed Meta Data <#set-deed-metadata>`_: ``PUT /setDeedMetaData/:deedId/:dataHash``
 
   - `Utils <#utils>`_
 
@@ -779,6 +780,59 @@ Sign a deed that exists in the ``HaryanaLandRegistryProxy`` contract.
             r:      '0xc02d019c08d5fb700ac7eab54d4ecffe3b02d3253a7c34c2a6ac22e7aee65ebb',
             s:      '0x51ef8a7292b73d0742fadb3a2e42b4a1c17b03be14c8ec3dd5b2c458c9bb36ae'
           }
+    simple: true
+  })
+
+Set Metadata of Deed
+---------
+Set the meta data of a deed within the ``HaryanaLandRegistryProxy`` contract.
+
+- URL:
+``/setMetaData/:deedId/:dataHash``
+
+- Method:
+``PUT``
+
+- Body
+**Required**
+
+.. code-block:: javascript
+
+  /**
+   * @param {String}  deedId      Id of the deed which the datahash is being assigned to.
+   * @param {String}  dataHash    Datahash that points to the encrypted IPFS artifact.
+   */
+
+- Success Response
+
+.. code-block:: javascript
+
+  /**
+   * @returns {String} Transaction hash.
+   */
+
+.. code-block:: console
+
+  statusCode: 200
+  body: {
+          txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e',
+        }
+
+- Error Response
+
+.. code-block:: console
+
+  TODO
+
+- Sample Call
+
+.. code-block:: javascript
+
+  const rp = require('request-promise')
+  const respone = await rp({
+    url: 'http://localhost:8080/setMetaData/7/QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
+    'PUT',
+    json: true,
     simple: true
   })
 
