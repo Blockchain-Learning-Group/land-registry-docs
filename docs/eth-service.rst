@@ -788,7 +788,7 @@ Set Metadata of Deed
 Set the meta data of a deed within the ``HaryanaLandRegistryProxy`` contract.
 
 - URL:
-``/setMetaData/:deedId/:dataHash``
+``/setDeedMetaData/:deedId/:dataHash``
 
 - Method:
 ``PUT``
@@ -830,7 +830,7 @@ Set the meta data of a deed within the ``HaryanaLandRegistryProxy`` contract.
 
   const rp = require('request-promise')
   const respone = await rp({
-    url: 'http://localhost:8080/setMetaData/7/QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
+    url: 'http://localhost:8080/setDeedMetaData/7/QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
     'PUT',
     json: true,
     simple: true
