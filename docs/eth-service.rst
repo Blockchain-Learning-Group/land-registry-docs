@@ -872,7 +872,7 @@ Returns the transaction receipt after waiting a specified amount of confirmation
 .. code-block:: console
 
   statusCode: 200
-  body: {
+  body: receipt {
          rawReceipt:
            { transactionHash: '0x9c37cf50d7f0ebbc80247acb1a1d0e363321f9acd96da7d5661740b1fb5d2e80',
              transactionIndex: 0,
