@@ -76,11 +76,6 @@ Create an account for a party. Creating a new digital account for the party, whi
 - Method:
 ``POST``
 
-- URL Params
-**Required**
-
-``None``
-
 - Body
 **Required**
 
@@ -657,9 +652,71 @@ Returns all on-chain information about a specific deed.
     simple: true
   })
 
-Get Deed By Property Id
+Get Deeds By Authority Id
+------------------------
+Returns all on-chain deed information associated with the given authority.
+
+- URL:
+``/getDeedsByAuthority/:authorityId'``
+
+- Method:
+``GET``
+
+- URL Params
+**Required**
+
+.. code-block:: javascript
+
+  /**
+   * @param {Integer} authorityId Id of the authority.
+   */
+
+- Success Response
+
+.. code-block:: javascript
+
+  /**
+   * @returns {Array} Array of objects containing all on-chain data for all associated deeds.
+   */
+
+.. code-block:: console
+
+  statusCode: 200
+  body:
+    deeds: {
+          '5': {
+                  signOff:   0,
+                  buyer:     '0xa8d5f39f3ccd4795b0e38feacb4f2ee22486ca44',
+                  seller:    '0x3596ddf5181c9f6aa1bce87d967bf227dde70ddf',
+                  authority: '0x26006236eab6409d9fdecb16ed841033d6b4a6bc',
+                  propertyId:   5,
+                  dataHash:  'QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
+                  state:     0
+                },
+        }
+
+
+- Error Response
+
+.. code-block:: console
+
+  TODO
+
+- Sample Call
+
+.. code-block:: javascript
+
+  const rp = require('request-promise')
+  const respone = await rp({
+    url: 'http://localhost:8080/getDeedsByAuthority/0x26006236eab6409d9fdecb16ed841033d6b4a6bc',
+    'GET',
+    json: true,
+    simple: true
+  })
+
+Get Deeds By Property Id
 -----------------------
-Returns all on-chain deed information associated with the given property.
+Returns all on-chain deed information associated with the given authority.
 
 - URL:
 ``/getDeedsByProperty/:propertyId'``
