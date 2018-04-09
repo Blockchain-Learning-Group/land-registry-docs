@@ -11,40 +11,41 @@ Table of Contents
 *****************
 1. Terminology_
 
-2. `API <#api>`_
+2. API_
 
-  - `Accounts <#accounts>`_
+  - `Accounts <#api-accounts>`_
 
-    - `Create Account <#create-account>`_: ``POST /accounts/{data}``
-    - `Get Account by Party Id <#get-account-by-party-id>`_: ``GET /accounts/:partyId``
+    - `Create Account <#api-accounts-create-account>`_: ``POST /accounts/{data}``
+    - `Get Account by Party Id <#api-accounts-get-account-by-party-id>`_: ``GET /accounts/:partyId``
 
-  - `Assets <#assets>`_
+  - `Assets <#api-assets>`_
 
-    - `Add Asset <#add-asset>`_: ``POST /assets/{data}``
-    - `Get Asset By Id <#get-asset-by-id>`_: ``GET /assets/:assetId``
-    - `Get All Assets <#get-all-assets>`_: ``GET /assets``
-    - `Asset Exists <#asset-exists>`_: ``GET /assetExists/:assetId``
+    - `Add Asset <#api-assets-add-asset>`_: ``POST /assets/{data}``
+    - `Get Asset By Id <#api-assets-get-asset-by-id>`_: ``GET /assets/:assetId``
+    - `Get All Assets <#api-assets-get-all-assets>`_: ``GET /assets``
+    - `Asset Exists <#api-assets-asset-exists>`_: ``GET /assetExists/:assetId``
 
-  - `Authorities <#authorities>`_
+  - `Authorities <#api-authorities>`_
 
-    - `Add Authority <#add-authority>`_: ``POST /authorities/{data}``
+    - `Add Authority <#api-authorities-add-authority>`_: ``POST /authorities/{data}``
 
-  - `Deeds <#deeds>`_
+  - `Deeds <#api-deeds>`_
 
-    - `Add Deed <#add-deed>`_: ``POST /deeds/{data}``
-    - `Get Next Deed Id <#next-deed>`_: ``GET /getNextDeedId``
-    - `Approve Deed <#approve-deed>`_: ``PUT /approveDeed/{data}``
-    - `Get Deed By Id <#get-deed-by-id>`_: ``GET /deeds/:deedId``
-    - `Get All Deeds <#get-all-deeds>`_: ``GET /getAllDeeds``
-    - `Get Deeds By Property Id <#get-beeds-by-property-id>`_: ``GET /getDeedsByProperty/:propertyId``
-    - `Sign Deed <#sign-deed>`_: ``PUT /signDeed/{data}``
-    - `Set Deed Meta Data <#set-deed-metadata>`_: ``PUT /setDeedMetaData/:deedId/:dataHash``
+    - `Add Deed <#api-deeds-add-deed>`_: ``POST /deeds/{data}``
+    - `Get Next Deed Id <#api-deeds-get-next-deed-id>`_: ``GET /getNextDeedId``
+    - `Approve Deed <#api-deeds-approve-deed>`_: ``PUT /approveDeed/{data}``
+    - `Get Deed By Id <#api-deeds-get-deed-by-id>`_: ``GET /deeds/:deedId``
+    - `Get All Deeds <#api-deeds-get-all-deeds>`_: ``GET /getAllDeeds``
+    - `Get Deeds By Property Id <#api-deeds-get-deeds-by-property-id>`_: ``GET /getDeedsByProperty/:propertyId``
+    - `Get Deeds By Authority Id <#api-deeds-get-deeds-by-authority-id>`_: ``GET /getDeedsByProperty/:propertyId``
+    - `Sign Deed <#api-deeds-sign-deed>`_: ``PUT /signDeed/{data}``
+    - `Set Metadata of Deed <#api-deeds-set-deed-metadata>`_: ``PUT /setDeedMetaData/:deedId/:dataHash``
 
-  - `Utils <#utils>`_
+  - `Utils <#api-utils>`_
 
-    - `Get Transaction Receipt After Confrimations <#get-transaction-receipt-after-confirmations>`_: ``GET transactionReceipt/:txHash/:confirmations``
+    - `Get Transaction Receipt After Confrimations <#api-utils-get-transaction-receipt-after-confirmations>`_: ``GET transactionReceipt/:txHash/:confirmations``
 
-.. _Terminology:
+.. _terminology:
 
 Terminology
 ***********
@@ -62,21 +63,24 @@ Terminology
 
 ====
 
-.. _API:
+.. _api:
 
 API
 ***
 
 ====
 
-.. _API/Accounts:
+.. _api-accounts:
 
 Accounts
 ========
 
+.. _api-accounts-create-account:
+
 Create Account
 --------------
 Create an account for a party. Creating a new digital account for the party, which is in fact a smart contract that will serve to interact directly with their assets held in the underlying asset registry.
+All party's must have an account. This may be created by invoking this method directly or will be created upon transfer of ownership internally if the buyer does not already have an account.
 
 - URL:
 ``/accounts``
@@ -90,8 +94,7 @@ Create an account for a party. Creating a new digital account for the party, whi
 .. code-block:: javascript
 
  /**
-  * @param {Address} partyId Party to create an account for. This is the
-  *                          person's real world Id, ie. Aadhaar number or estonian EID.
+  * @param {Address} partyId Party to create an account for. This is the person's real world Id, ie. Aadhaar number or estonian EID, ethereum address.
   */
 
 - Success Response
@@ -102,12 +105,6 @@ Create an account for a party. Creating a new digital account for the party, whi
   body: {
           txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e',
         }
-
-- Error Response
-
-.. code-block:: console
-
-  TODO
 
 - Sample Call
 
@@ -124,6 +121,7 @@ Create an account for a party. Creating a new digital account for the party, whi
     simple: true
   })
 
+.. _api-accounts-get-account-by-party-id:
 
 Get Account by Party Id
 -----------------------
@@ -141,7 +139,7 @@ Get the address of the on-chain account associated with a party, to be concrete 
 .. code-block:: javascript
 
  /**
-  * @param {Address} partyId Person's real world Id, ie. Aadhaar number or estonian EID, ethereum address at this time however for the PoC.
+  * @param {Address} partyId Person's real world Id, ie. Aadhaar number or estonian EID, ethereum address.
   */
 
 - Success Response
@@ -163,7 +161,11 @@ Get the address of the on-chain account associated with a party, to be concrete 
 
 .. code-block:: console
 
-  TODO
+  statusCode: 404
+  error: {
+    code: 'NotFound',
+    message: 'Account for party: 10 does not exist.'
+  }
 
 - Sample Call
 
@@ -177,9 +179,12 @@ Get the address of the on-chain account associated with a party, to be concrete 
     simple: true
   })
 
+.. _api-assets:
 
 Assets
 ======
+
+.. _api-assets-add-asset:
 
 Add Asset
 ---------
@@ -198,7 +203,7 @@ Adds a new asset to the ``StandardAssetRegistry`` contract.
 
  /**
   * @param {Integer} assetId  Id of the new asset.
-  * @param {Address} owner    Current owner of the asset, Account address.
+  * @param {Address} owner    Current owner of the asset, Ethereum address.
   * @param {String}  dataHash File storage hash to look up raw data regarding the asset,
   */
 
@@ -217,12 +222,6 @@ Adds a new asset to the ``StandardAssetRegistry`` contract.
           txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e',
         }
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -239,6 +238,8 @@ Adds a new asset to the ``StandardAssetRegistry`` contract.
     }
     simple: true
   })
+
+.. _api-assets-get-asset-by-id:
 
 Get Asset By Id
 ---------------
@@ -298,10 +299,11 @@ Returns all on-chain information about a specific asset.
     simple: true
   })
 
+.. _api-assets-get-all-assets:
 
 Get All Assets
 --------------
-Returns all on-chain information about all existing assets in the ```StandardAssetRegistry`.
+Returns all on-chain information about all existing assets in the ``StandardAssetRegistry``.
 
 - URL:
 ``/assets``
@@ -331,12 +333,6 @@ Returns all on-chain information about all existing assets in the ```StandardAss
                 }
           }
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -349,9 +345,11 @@ Returns all on-chain information about all existing assets in the ```StandardAss
     simple: true
   })
 
+.. _api-assets-asset-exists:
+
 Assets Exists
 ---------------
-Returns bool if a specific asset exists within the ```StandardAssetRegistry`.
+Returns bool if a specific asset exists within the ``StandardAssetRegistry``.
 
 - URL:
 
@@ -384,12 +382,6 @@ Returns bool if a specific asset exists within the ```StandardAssetRegistry`.
           exists: true
         }
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -404,8 +396,12 @@ Returns bool if a specific asset exists within the ```StandardAssetRegistry`.
 
 ====
 
+.. _api-authorities:
+
 Authorities
 ===========
+
+.. _api-authorities-add-authority:
 
 Add Authority
 -------------
@@ -441,12 +437,6 @@ Adds a new authority to the ``HaryanaLandRegistryProxy`` contract.
           txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e'
         }
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -464,8 +454,12 @@ Adds a new authority to the ``HaryanaLandRegistryProxy`` contract.
 
 ====
 
+.. _api-deeds:
+
 Deeds
 =====
+
+.. _api-deeds-add-deed:
 
 Add Deed
 ---------
@@ -506,12 +500,6 @@ Adds a new deed to the ``HaryanaLandRegistryProxy`` contract.
           txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e'
         }
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -531,6 +519,8 @@ Adds a new deed to the ``HaryanaLandRegistryProxy`` contract.
     }
     simple: true
   })
+
+.. _api-deeds-approve-deed:
 
 Approve Deed
 ------------
@@ -571,12 +561,6 @@ Approve a deed that exists in the ``HaryanaLandRegistryProxy`` contract.
           txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e'
         }
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -596,6 +580,8 @@ Approve a deed that exists in the ``HaryanaLandRegistryProxy`` contract.
           }
     simple: true
   })
+
+.. _api-deeds-get-deed-by-id:
 
 Get Deed By Id
 ---------------
@@ -621,22 +607,46 @@ Returns all on-chain information about a specific deed.
 .. code-block:: javascript
 
   /**
-   * @returns {Object} All on-chain fields of the deed struct.
+   * @returns {Object} All on-chain fields of the deed struct and all log data.
    */
 
 .. code-block:: console
 
   statusCode: 200
   body: {
-          signOff:   0,
-          buyer:     '0x627306090abab3a6e1400e9345bc60c78a8bef57',
-          seller:    '0xf17f52151ebef6c7334fad080c5704d77216b732',
-          authority: '0xc5fdf4076b8f3a5357c5e395ab970b5b54098fef',
-          assetId:   1,
-          dataHash:  'QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
-          state:     0,
+      signOff: 0,
+      buyer: '0x776220e6ef98f8c58a71246135e2725490690cc3',
+      seller: '0xb386ee3160c5d84a5455f6aea2ca21f68811ffc6',
+      authority: '0x592c0e099e4d36eece9149f0da602d292ea05a06',
+      propertyId: 1,
+      dataHash: 'QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
+      state: 0,
+      logData: {
+        addedLogs: {
+          transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          block: 9,
+          timestamp: 1523307993
+        },
+        sigLogs: {
+          buyerSigTransaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          buyerSigBlock: 11,
+          buyerSigTimestamp: 1523307993,
+          sellerSigTransaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          sellerSigBlock: 10,
+          sellerSigTimestamp: 1523307993
+        },
+        approvalLogs: {
+          transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          block: 9,
+          timestamp: 1523307993
+        },
+        executedLogs: {
+          transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          block: 9,
+          timestamp: 1523307993
         }
-
+      }
+    }
 
 - Error Response
 
@@ -659,6 +669,8 @@ Returns all on-chain information about a specific deed.
     json: true,
     simple: true
   })
+
+.. _api-deeds-get-all-deeds:
 
 Get All Deeds
 -------------
@@ -683,7 +695,7 @@ Returns all deeds in the contract and their associated log data.
   statusCode: 200
   body:
   { deeds:
- { '5':
+  { '5':
     { signOff: 0,
       buyer: '0x776220e6ef98f8c58a71246135e2725490690cc3',
       seller: '0x592c0e099e4d36eece9149f0da602d292ea05a06',
@@ -691,11 +703,36 @@ Returns all deeds in the contract and their associated log data.
       propertyId: 5,
       dataHash: 'QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
       state: 0,
-      logData: [Object],
+      logData: {
+        addedLogs: {
+          transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          block: 9,
+          timestamp: 1523307993
+        },
+        sigLogs: {
+          buyerSigTransaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          buyerSigBlock: 11,
+          buyerSigTimestamp: 1523307993,
+          sellerSigTransaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          sellerSigBlock: 10,
+          sellerSigTimestamp: 1523307993
+        },
+        approvalLogs: {
+          transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          block: 9,
+          timestamp: 1523307993
+        },
+        executedLogs: {
+          transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+          block: 9,
+          timestamp: 1523307993
+        },
+      }
       createdTransaction: '0x00c1dbf3eb09dced641e3432df0f4dee0e15fd34023b0ca98dadca05407afaa2',
       createdBlock: 9,
-      timestamp: 1522445853 } } }
-
+      timestamp: 1522445853 }
+    }
+  }
 
 - Error Response
 
@@ -714,6 +751,8 @@ Returns all deeds in the contract and their associated log data.
     json: true,
     simple: true
   })
+
+.. _api-deeds-get-deeds-by-authority:
 
 Get Deeds By Authority Id
 ------------------------
@@ -745,25 +784,46 @@ Returns all on-chain deed information associated with the given authority.
 .. code-block:: console
 
   statusCode: 200
-  body:
+  body: {
     deeds: {
-          '5': {
-                  signOff:   0,
-                  buyer:     '0xa8d5f39f3ccd4795b0e38feacb4f2ee22486ca44',
-                  seller:    '0x3596ddf5181c9f6aa1bce87d967bf227dde70ddf',
-                  authority: '0x26006236eab6409d9fdecb16ed841033d6b4a6bc',
-                  propertyId:   5,
-                  dataHash:  'QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
-                  state:     0
-                },
+      '5':
+      { signOff: 0,
+        buyer: '0x776220e6ef98f8c58a71246135e2725490690cc3',
+        seller: '0x592c0e099e4d36eece9149f0da602d292ea05a06',
+        authority: '0x0357a2db527a16775f646c01f489d3d56c84e64b',
+        propertyId: 5,
+        dataHash: 'QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
+        state: 0,
+        logData: {
+          addedLogs: {
+            transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            block: 9,
+            timestamp: 1523307993
+          },
+          sigLogs: {
+            buyerSigTransaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            buyerSigBlock: 11,
+            buyerSigTimestamp: 1523307993,
+            sellerSigTransaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            sellerSigBlock: 10,
+            sellerSigTimestamp: 1523307993
+          },
+          approvalLogs: {
+            transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            block: 9,
+            timestamp: 1523307993
+          },
+          executedLogs: {
+            transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            block: 9,
+            timestamp: 1523307993
+          },
         }
-
-
-- Error Response
-
-.. code-block:: console
-
-  TODO
+        createdTransaction: '0x00c1dbf3eb09dced641e3432df0f4dee0e15fd34023b0ca98dadca05407afaa2',
+        createdBlock: 9,
+        timestamp: 1522445853 }
+      }
+    }
 
 - Sample Call
 
@@ -777,9 +837,11 @@ Returns all on-chain deed information associated with the given authority.
     simple: true
   })
 
+.. _api-deeds-get-deeds-by-property-id:
+
 Get Deeds By Property Id
 -----------------------
-Returns all on-chain deed information associated with the given authority.
+Returns all on-chain deed information associated with the given property.
 
 - URL:
 ``/getDeedsByProperty/:propertyId'``
@@ -801,30 +863,52 @@ Returns all on-chain deed information associated with the given authority.
 .. code-block:: javascript
 
   /**
-   * @returns {Array} Array of objects containing all on-chain data for all associated deeds.
+   * @returns {Array} Array of objects containing all on-chain data for the deeds.
    */
 
 .. code-block:: console
 
   statusCode: 200
   body: {
-          '5': {
-                  signOff:   0,
-                  buyer:     '0xa8d5f39f3ccd4795b0e38feacb4f2ee22486ca44',
-                  seller:    '0x3596ddf5181c9f6aa1bce87d967bf227dde70ddf',
-                  authority: '0x26006236eab6409d9fdecb16ed841033d6b4a6bc',
-                  assetId:   5,
-                  dataHash:  'QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
-                  state:     0
-                },
+    deeds: {
+      '5':
+      { signOff: 0,
+        buyer: '0x776220e6ef98f8c58a71246135e2725490690cc3',
+        seller: '0x592c0e099e4d36eece9149f0da602d292ea05a06',
+        authority: '0x0357a2db527a16775f646c01f489d3d56c84e64b',
+        propertyId: 5,
+        dataHash: 'QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
+        state: 0,
+        logData: {
+          addedLogs: {
+            transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            block: 9,
+            timestamp: 1523307993
+          },
+          sigLogs: {
+            buyerSigTransaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            buyerSigBlock: 11,
+            buyerSigTimestamp: 1523307993,
+            sellerSigTransaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            sellerSigBlock: 10,
+            sellerSigTimestamp: 1523307993
+          },
+          approvalLogs: {
+            transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            block: 9,
+            timestamp: 1523307993
+          },
+          executedLogs: {
+            transaction: '0x12a6db8340be6cf550255459476802ed18d7f2080f1d5b21fadf322709e33067',
+            block: 9,
+            timestamp: 1523307993
+          },
         }
-
-
-- Error Response
-
-.. code-block:: console
-
-  TODO
+        createdTransaction: '0x00c1dbf3eb09dced641e3432df0f4dee0e15fd34023b0ca98dadca05407afaa2',
+        createdBlock: 9,
+        timestamp: 1522445853 }
+      }
+    }
 
 - Sample Call
 
@@ -837,6 +921,8 @@ Returns all on-chain deed information associated with the given authority.
     json: true,
     simple: true
   })
+
+.. _api-deeds-sign-deed:
 
 Sign Deed
 ---------
@@ -877,12 +963,6 @@ Sign a deed that exists in the ``HaryanaLandRegistryProxy`` contract.
           txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e',
         }
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -902,6 +982,8 @@ Sign a deed that exists in the ``HaryanaLandRegistryProxy`` contract.
           }
     simple: true
   })
+
+.. _api-deeds-set-metadata-of-deed:
 
 Set Metadata of Deed
 ---------
@@ -938,12 +1020,6 @@ Set the meta data of a deed within the ``HaryanaLandRegistryProxy`` contract.
           txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e',
         }
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -956,7 +1032,9 @@ Set the meta data of a deed within the ``HaryanaLandRegistryProxy`` contract.
     simple: true
   })
 
-  Set Metadata of Deed
+.. _api-deeds-get-next-deed-id:
+
+Get Next Deed Id
 ---------
 Get the next deed Id within the ``HaryanaLandRegistryProxy`` contract.
 
@@ -981,12 +1059,6 @@ Get the next deed Id within the ``HaryanaLandRegistryProxy`` contract.
           deedId: 0
         }
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -1001,8 +1073,12 @@ Get the next deed Id within the ``HaryanaLandRegistryProxy`` contract.
 
 ====
 
+.. _api-utils:
+
 Utils
 =====
+
+.. _api-utils-get-transaction-receipt-after-confirmations:
 
 Get Transaction Receipt After Confirmations
 -------------------------------------------
@@ -1055,10 +1131,16 @@ Returns the transaction receipt after waiting a specified amount of confirmation
                blockNumber: 13,
                address: '0xf7bc3030ef36eb38016e39c2c06825d8c14b324c',
                type: 'mined',
-               event: 'LogSaleDeedAdded',
-               args: [Object] } ]
+               event: 'Transfer',
+               args: args:
+               { from: '0x0000000000000000000000000000000000000000',
+                 to: '0xb386ee3160c5d84a5455f6aea2ca21f68811ffc6',
+                 assetId: '11',
+                 operator: '0x840cf0e3d1cca724a6d5dc274b06921b6cc065b4',
+                 userData: '0x516d537356384a324b67796e5135444b316e52634b735475786f6a467645486d676d4a777255397648576579454c',
+                 operatorData: '0x' }
+             } ]
          }
-
 
 - Error Response
 
