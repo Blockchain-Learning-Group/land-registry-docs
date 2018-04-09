@@ -752,7 +752,7 @@ Returns all deeds in the contract and their associated log data.
     simple: true
   })
 
-.. _api-deeds-get-deeds-by-authority:
+.. _api-deeds-get-deeds-by-authority-id:
 
 Get Deeds By Authority Id
 ------------------------
@@ -983,7 +983,7 @@ Sign a deed that exists in the ``HaryanaLandRegistryProxy`` contract.
     simple: true
   })
 
-.. _api-deeds-set-metadata-of-deed:
+.. _api-deeds-set-deed-metadata:
 
 Set Metadata of Deed
 ---------
