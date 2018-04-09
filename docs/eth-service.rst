@@ -9,7 +9,7 @@ This service interacts directly with the network as well as the ``HaryanaLandReg
 
 Table of Contents
 *****************
-1. `Terminology <#terminology>`_
+1. Terminology_
 
 2. `API <#api>`_
 
@@ -32,8 +32,10 @@ Table of Contents
   - `Deeds <#deeds>`_
 
     - `Add Deed <#add-deed>`_: ``POST /deeds/{data}``
+    - `Get Next Deed Id <#next-deed>`_: ``GET /getNextDeedId``
     - `Approve Deed <#approve-deed>`_: ``PUT /approveDeed/{data}``
     - `Get Deed By Id <#get-deed-by-id>`_: ``GET /deeds/:deedId``
+    - `Get All Deeds <#get-all-deeds>`_: ``GET /getAllDeeds``
     - `Get Deeds By Property Id <#get-beeds-by-property-id>`_: ``GET /getDeedsByProperty/:propertyId``
     - `Sign Deed <#sign-deed>`_: ``PUT /signDeed/{data}``
     - `Set Deed Meta Data <#set-deed-metadata>`_: ``PUT /setDeedMetaData/:deedId/:dataHash``
@@ -42,26 +44,32 @@ Table of Contents
 
     - `Get Transaction Receipt After Confrimations <#get-transaction-receipt-after-confirmations>`_: ``GET transactionReceipt/:txHash/:confirmations``
 
+.. _Terminology:
+
 Terminology
 ***********
 - ``Party``: A party refers to a real world human being, buyers and sellers associed with sale deeds are most commonly referred to as parties.
 
   - Where ``partyId`` is their real-world identity. This identity may be their Aadhaar number an estoian EID and others that support digital signatures in order to prove owernship of such an id.
 
-- ``Asset``: A physical asset, held as a ``Non-Fungible Token or NFT`` in the underlying `StandardAssetRegistry` contract. A property or piece or land is interpreted as an asset within the registry.
+- ``Asset``: A physical asset, held as a ``Non-Fungible Token or NFT`` in the underlying ``StandardAssetRegistry`` contract. A property or piece or land is interpreted as an asset within the registry.
 
 - ``Authority``: A party that has signing power of sale deeds. Every sale deed must posses a valid authority to approve the deed.
 
-- ``Property``: A physical piece of land.  A plot of land will be referred to as a property at the application level and generically as an asset within the `StandardAssetRegistry`.
+- ``Property``: A physical piece of land.  A plot of land will be referred to as a property at the application level and generically as an asset within the ``StandardAssetRegistry``.
 
-- ``Deed``: A sale deed that is associated with a specific property. A completely executed and approved sale deed is required in order to transfer pwnership of a property.
+- ``Deed``: A sale deed that is associated with a specific property. A completely executed and approved sale deed is required in order to transfer ownership of a property.
 
 ====
+
+.. _API:
 
 API
 ***
 
 ====
+
+.. _API/Accounts:
 
 Accounts
 ========
@@ -652,6 +660,61 @@ Returns all on-chain information about a specific deed.
     simple: true
   })
 
+Get All Deeds
+-------------
+Returns all deeds in the contract and their associated log data.
+
+- URL:
+``/getAllDeeds``
+
+- Method:
+``GET``
+
+- Success Response
+
+.. code-block:: javascript
+
+  /**
+   * @returns {Array} Array of objects containing all on-chain and log data for all deeds.
+   */
+
+.. code-block:: console
+
+  statusCode: 200
+  body:
+  { deeds:
+ { '5':
+    { signOff: 0,
+      buyer: '0x776220e6ef98f8c58a71246135e2725490690cc3',
+      seller: '0x592c0e099e4d36eece9149f0da602d292ea05a06',
+      authority: '0x0357a2db527a16775f646c01f489d3d56c84e64b',
+      propertyId: 5,
+      dataHash: 'QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
+      state: 0,
+      logData: [Object],
+      createdTransaction: '0x00c1dbf3eb09dced641e3432df0f4dee0e15fd34023b0ca98dadca05407afaa2',
+      createdBlock: 9,
+      timestamp: 1522445853 } } }
+
+
+- Error Response
+
+.. code-block:: console
+
+  TODO
+
+- Sample Call
+
+.. code-block:: javascript
+
+  const rp = require('request-promise')
+  const respone = await rp({
+    url: 'http://localhost:8080/getAllDeeds',
+    'GET',
+    json: true,
+    simple: true
+  })
+
 Get Deeds By Authority Id
 ------------------------
 Returns all on-chain deed information associated with the given authority.
@@ -873,6 +936,49 @@ Set the meta data of a deed within the ``HaryanaLandRegistryProxy`` contract.
   statusCode: 200
   body: {
           txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e',
+        }
+
+- Error Response
+
+.. code-block:: console
+
+  TODO
+
+- Sample Call
+
+.. code-block:: javascript
+
+  const rp = require('request-promise')
+  const respone = await rp({
+    url: 'http://localhost:8080/setDeedMetaData/7/QmSsV8J2KgynQ5DK1nRcKsTuxojFvEHmgmJwrU9vHWeyEL',
+    'PUT',
+    json: true,
+    simple: true
+  })
+
+  Set Metadata of Deed
+---------
+Get the next deed Id within the ``HaryanaLandRegistryProxy`` contract.
+
+- URL:
+``/getNextDeedId``
+
+- Method:
+``GET``
+
+- Success Response
+
+.. code-block:: javascript
+
+  /**
+   * @returns {Number} Deed Id.
+   */
+
+.. code-block:: console
+
+  statusCode: 200
+  body: {
+          deedId: 0
         }
 
 - Error Response
