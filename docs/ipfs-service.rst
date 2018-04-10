@@ -15,10 +15,11 @@ API
 1. `Encrypt <#encrypt>`_
 2. `Decrypt <#decrypt>`_
 
+.. _encrypt:
 
 Encrypt
 -------
-Adds a PDF file with contents to the decentralized storage of IPFS.
+Encrypts and adds a PDF file with contents to the decentralized storage of IPFS.
 
 - URL:
 ``/ipfs/encrypt``
@@ -48,12 +49,6 @@ Adds a PDF file with contents to the decentralized storage of IPFS.
   statusCode: 200
   body: { ipfsHash: 'QmPQWExfz6bkWgQkdrVz3qhpXsZsAegMYDbMuj9BBk6Gg3'}
 
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Call
 Call must be sent as a multi-part form with the file name in the form and as a PDF.
 
@@ -78,10 +73,11 @@ Call must be sent as a multi-part form with the file name in the form and as a P
     }
   });
 
+.. _decrypt:
 
 Decrypt
 ---------------
-Returns a downloaded PDF from IPFS.
+Returns and decrypts the downloaded PDF from IPFS.
 
 - URL:
 
@@ -111,10 +107,6 @@ Returns a downloaded PDF from IPFS.
           file:    '...',    // File
         }
 
-
-- Error Response
-TODO
-
 - Sample Call
 
 .. code-block:: javascript
@@ -126,7 +118,7 @@ TODO
     json: true,
     resolveWithFullResponse: true,
     body: {
-      password: "...
+      password: "..."
       ipfsHash: "..."
     },
     simple: true,
